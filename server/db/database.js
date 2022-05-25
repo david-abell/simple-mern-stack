@@ -7,20 +7,40 @@ const client = new MongoClient(Db, {
   useUnifiedTopology: true,
 });
 
-async function connectToDatabase() {
+let MongoDb = {
+  db: null,
+};
+
+client.on("connectionClosed", (ev) =>
+  console.log(`MongoDb Connection Id #${ev.connectionId} successfully closed`)
+);
+
+async function connect() {
+  if (MongoDb.db) return;
+
   try {
-    const connection = await client.connect();
-    return connection.db(DATABASE_NAME);
+    await client.connect();
+    MongoDb.db = client.db(DATABASE_NAME);
+    console.log(`connected to database "${DATABASE_NAME}"`);
+    // console.log("connected", Object.keys(client), client.close);
+    return client;
   } catch (err) {
     console.log("Failed to connect to database", err.message);
-    throw new Error(err);
+    close();
   }
 }
 
-function shutdownHandler(signal) {
-  console.log(`Caught ${signal}, shutting down database connection`);
-  client.close();
+function getDb() {
+  return MongoDb.db;
+}
+
+async function close() {
+  console.log("shutting down database connection");
+  if (MongoDb.db) {
+    // console.log(Object.keys(client), client.close);
+    await client.close();
+  }
   process.exit();
 }
 
-module.exports = { connectToDatabase, shutdownHandler };
+module.exports = { connect, close, getDb, client };

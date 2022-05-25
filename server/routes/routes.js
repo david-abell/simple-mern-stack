@@ -1,7 +1,7 @@
 const express = require("express");
 const { ObjectId } = require("mongodb");
 
-function routes(app, database) {
+function routes(database) {
   const router = express.Router();
 
   router.route("/record").get(function (req, res, next) {
@@ -76,8 +76,7 @@ function routes(app, database) {
     });
   });
 
-  app.use(router);
-  return app;
+  return router;
 }
 
 module.exports = routes;
