@@ -1,11 +1,17 @@
 const express = require("express");
 const { ObjectId } = require("mongodb");
+const MongoDb = require("../db/database");
 
-function routes(database) {
+function routes() {
   const router = express.Router();
 
+  router.all("/*", (req, res, next) => {
+    req.db = MongoDb.getDb();
+    next();
+  });
+
   router.route("/record").get(function (req, res, next) {
-    database
+    req.db
       .collection("records")
       .find({})
       .toArray((err, data) => {
@@ -19,7 +25,8 @@ function routes(database) {
 
   router.route("/record/:id").get(function (req, res) {
     let myquery = { _id: ObjectId(req.params.id) };
-    database.collection("records").findOne(myquery, (err, data) => {
+    console.log(Object.keys(req.client));
+    req.db.collection("records").findOne(myquery, (err, data) => {
       if (err) {
         console.log(err);
         next(err);
@@ -34,7 +41,7 @@ function routes(database) {
       position: req.body.position,
       level: req.body.level,
     };
-    database.collection("records").insertOne(myobj, function (err, data) {
+    req.db.collection("records").insertOne(myobj, function (err, data) {
       if (err) {
         console.log(err);
         next(err);
@@ -52,7 +59,7 @@ function routes(database) {
         level: req.body.level,
       },
     };
-    database
+    req.db
       .collection("records")
       .updateOne(myquery, newvalues, function (err, data) {
         if (err) {
@@ -66,7 +73,7 @@ function routes(database) {
 
   router.route("/:id").delete((req, res) => {
     let myquery = { _id: ObjectId(req.params.id) };
-    database.collection("records").deleteOne(myquery, (err, data) => {
+    req.db.collection("records").deleteOne(myquery, (err, data) => {
       if (err) {
         console.log(err);
         next(err);
