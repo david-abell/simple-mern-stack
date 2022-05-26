@@ -10,10 +10,10 @@ describe("Sample Test", () => {
   beforeAll(async () => {
     const mockExit = jest.spyOn(process, "exit").mockImplementation();
     // const mockConsole = jest.spyOn(console, "log").mockImplementation();
-    connection = await MongoClient.connect(process.env.ATLAS_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    // connection = await MongoClient.connect(process.env.ATLAS_URI, {
+    //   useNewUrlParser: true,
+    //   useUnifiedTopology: true,
+    // });
     // db = await connection.db(globalThis.__MONGO_DB_NAME__);
   });
 
