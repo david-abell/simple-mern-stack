@@ -25,7 +25,6 @@ function routes() {
 
   router.route("/record/:id").get(function (req, res) {
     let myquery = { _id: ObjectId(req.params.id) };
-    console.log(Object.keys(req.client));
     req.db.collection("records").findOne(myquery, (err, data) => {
       if (err) {
         console.log(err);

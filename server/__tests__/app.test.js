@@ -3,12 +3,17 @@ const { MongoClient } = require("mongodb");
 const request = require("supertest");
 const { makeApp, shutdownHandler } = require("../app.js");
 const MongoDb = require("../db/database");
-const router = require("../routes/routes");
 
-describe("Sample Test", () => {
+describe("routes", () => {
   let connection;
   let db;
   let app;
+  let testId;
+  const testDoc = {
+    name: "Jane Austin",
+    position: "author",
+    level: "Senior",
+  };
 
   beforeAll(async () => {
     app = await makeApp();
@@ -23,16 +28,47 @@ describe("Sample Test", () => {
   });
 
   afterAll(async () => {
-    // await shutdownHandler();
-    console.log("mongodb closed");
-    // await connection.close();
+    await connection.close();
   });
 
-  it("should get an object with statusCode 200", async () => {
-    // console.log(db);
-    const res = await request(app).post("/record/add");
-    // console.log(Object.keys(res));
-    // console.log(res.error);
-    expect(res.statusCode).toEqual(200);
+  it("should insert a new record", async () => {
+    const res = await request(app).post("/record/add").send(testDoc);
+    testId = res.body.insertedId;
+    expect(res.status).toEqual(200);
+    expect(res.body.acknowledged).toBeTruthy();
+    expect(res.body.insertedId).toBeTruthy();
+  });
+
+  it("should get the inserted test object", async () => {
+    const mockResponse = { ...testDoc };
+    mockResponse._id = testId;
+    const res = await request(app).get(`/record/${testId}`);
+    expect(res.status).toEqual(200);
+    expect(res.body).toEqual(mockResponse);
+    expect(res.body._id).toEqual(testId);
+  });
+
+  it("should acknowledge one update", async () => {
+    const res = await request(app).post(`/update/${testId}`).send(testDoc);
+    expect(res.status).toEqual(200);
+    expect(res.body.acknowledged).toBeTruthy();
+    expect(res.body.matchedCount).toBe(1);
+  });
+
+  it("should get an object with status 200", async () => {
+    const res = await request(app).delete(`/${testId}`);
+    expect(res.status).toEqual(200);
+  });
+
+  it("should get an empty array and status 200", async () => {
+    const res = await request(app).get("/record");
+    expect(res.status).toEqual(200);
+    expect(Array.isArray(res.body)).toBeTruthy();
+    expect(res.body).toHaveLength(0);
+  });
+
+  it("should respond 404", async () => {
+    const res = await request(app).get("/");
+    expect(res.status).toEqual(404);
   });
 });
