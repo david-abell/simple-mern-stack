@@ -1,30 +1,38 @@
 require("dotenv").config({ path: "./config.env" });
 const { MongoClient } = require("mongodb");
 const request = require("supertest");
-const mongoApp = require("../app.js");
+const { makeApp, shutdownHandler } = require("../app.js");
+const MongoDb = require("../db/database");
+const router = require("../routes/routes");
 
 describe("Sample Test", () => {
   let connection;
   let db;
+  let app;
 
   beforeAll(async () => {
+    app = await makeApp();
     const mockExit = jest.spyOn(process, "exit").mockImplementation();
     // const mockConsole = jest.spyOn(console, "log").mockImplementation();
-    // connection = await MongoClient.connect(process.env.ATLAS_URI, {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    // });
-    // db = await connection.db(globalThis.__MONGO_DB_NAME__);
+    connection = await MongoClient.connect(global.__MONGO_URI__, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    db = await connection.db(process.env.MongoDb);
+    const mockDb = jest.spyOn(MongoDb, "getDb").mockReturnValue(db);
   });
 
   afterAll(async () => {
-    await mongoApp.MongoDb.close();
+    // await shutdownHandler();
     console.log("mongodb closed");
-    await connection.close();
+    // await connection.close();
   });
 
   it("should get an object with statusCode 200", async () => {
-    const res = await request(mongoApp.app).get("/record");
+    // console.log(db);
+    const res = await request(app).post("/record/add");
+    // console.log(Object.keys(res));
+    // console.log(res.error);
     expect(res.statusCode).toEqual(200);
   });
 });

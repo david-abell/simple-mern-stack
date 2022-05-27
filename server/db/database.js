@@ -22,7 +22,6 @@ async function connect() {
     await client.connect();
     MongoDb.db = client.db(DATABASE_NAME);
     console.log(`connected to database "${DATABASE_NAME}"`);
-    // console.log("connected", Object.keys(client), client.close);
     return client;
   } catch (err) {
     console.log("Failed to connect to database", err.message);
@@ -37,10 +36,8 @@ function getDb() {
 async function close() {
   console.log("shutting down database connection");
   if (MongoDb.db) {
-    // console.log(Object.keys(client), client.close);
     await client.close();
   }
-  process.exit();
 }
 
 module.exports = { connect, close, getDb, client };
