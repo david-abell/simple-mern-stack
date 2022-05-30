@@ -1,8 +1,8 @@
-# A simple mern stack app connecting to an Atlas Database
+# A simple mern stack app connected to an Atlas Database
 
 ## Why I built it this way
 
-- test project to experiment with Express, React and MongoDb
+- Test project to experiment with Express, React and MongoDb
 - Wanted to spin up a functional, test supported, MERN stack. Rather than just copying a boilerplate such as the [express-rest-boilerplate by Daniel Sousa](https://github.com/danielfsousa/express-rest-boilerplate), my goal was to understand Server/client interactions and then use the project as a base for other MERN projects.
 
 ## Technology used
@@ -12,26 +12,45 @@
 - Express.js server
 - MongoDb Atlas
 - Jest testing
-- eslint
+- Eslint
 
 ## Lessons learned/ problems encountered
 
 - The MongoDb test project was outdated and did not correctly load bootstrap or any formatting. Ended up adding React bootstrap components as the simplest fix.
-- rewrote and decoupled the express back end for ease of integration testing.
+- Rewrote and decoupled the express back end for ease of integration testing.
+
+## Installation
+
+For front end, cd to client directory and
+
+```bash
+npm install
+```
+
+For back end, cd to client directory and
+
+```bash
+npm install
+```
+
+Set up an Atlas free tier database with the [Getting started with Atlas guide](https://docs.atlas.mongodb.com/getting-started/)
+
+Rename `example.config.env` located in the `server` directory to `config.env`
+replace the ATLAS_URI with the appropriate connection string.
 
 ## Available scripts
 
-for front end, cd to client directory and
-
-```bash
-npm start
-```
-
-for back end, cd to client directory and
+For back end, cd to client directory:
 
 ```bash
 npm start
 npm test
+```
+
+For front end, cd to client directory:
+
+```bash
+npm start
 ```
 
 ## Credits
