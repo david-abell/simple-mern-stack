@@ -41,7 +41,7 @@ replace the ATLAS_URI with the appropriate connection string.
 
 ## Available scripts
 
-For back end, cd to client directory:
+For back end, cd to server directory:
 
 ```bash
 npm start
