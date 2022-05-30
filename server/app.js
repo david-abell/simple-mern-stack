@@ -18,7 +18,7 @@ async function makeApp() {
 async function shutdownHandler(signal) {
   console.log(`Received ${signal}, shutting down database connection...`);
   if (MongoDb.getDb()) {
-    await connection.close();
+    await MongoDb.close();
   }
   process.exit();
 }
