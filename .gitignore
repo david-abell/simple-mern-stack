@@ -17,7 +17,7 @@ coverage
 .env.development.local
 .env.test.local
 .env.production.local
-config.eng
+config.env
 globalConfig.json
 
 npm-debug.log*
