@@ -15,7 +15,6 @@ const App = () => {
     <div className="container-xxl mx-auto">
       <Navigation />
       <Routes>
-        <div></div>
         <Route exact path="/" element={<RecordList />} />
         <Route path="/edit/:id" element={<Edit />} />
         <Route path="/create" element={<Create />} />
