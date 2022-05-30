@@ -7,10 +7,6 @@ const { MongoClient } = require("mongodb");
 let connection;
 let app;
 
-// MongoDb.connect()
-//   .then((ev) => (connection = ev))
-//   .then(() => app.use(routes(MongoDb.getDb())));
-
 async function makeApp() {
   app = express();
   app.use(cors());
