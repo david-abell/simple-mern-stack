@@ -18,6 +18,7 @@
 
 - The MongoDb test project was outdated and did not correctly load bootstrap or any formatting. Ended up adding React bootstrap components as the simplest fix.
 - Rewrote and decoupled the express back end for ease of integration testing.
+- Be careful with Create React App initializing its own Git repository...
 
 ## Installation
 
